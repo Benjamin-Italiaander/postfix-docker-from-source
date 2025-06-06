@@ -29,7 +29,7 @@ userA@myserver myaccount@myoffice356domain.com
 After creating this file you need to update thew postfix lookup table management by using the postmap command
 
 ```bash
-# arter creating or changing the generic file run postmap
+# after creating or changing the generic file run postmap
 postmap /etc/postfix/generic
 
 # restart postfix
@@ -37,3 +37,29 @@ systemctl restart postfix
 ```
 
 Dont forget to postmap an restart after changing the files
+
+## Domain rewriting with canonical maps 
+In some cases you want to rewrite all email for a specific domain to another domains. For example all incoming email for example.org should be rewritten to example.com. Postfix uses canonical maps to rewrite domains or mail addresses. 
+Insert the following line to the /etc/postfix/main.cf:
+```bash
+# /etc/postfix/main.cf
+canonical_maps = hash:/etc/postfix/canonical
+```
+
+create a new file /etc/postfix/cononical and define in this file the domain rewrites
+```bash
+@example.org   @example.com
+```
+
+```bash
+# after creating or changing the generic file run postmap
+postmap /etc/postfix/canonical
+
+# restart postfix
+systemctl restart postfix
+```
+
+Dont forget to postmap an restart after changing the files
+
+
+
